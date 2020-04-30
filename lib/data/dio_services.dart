@@ -9,12 +9,13 @@ import 'dio_client.dart';
 class DioServices {
   static Future<NoteListResponse> getNoteList() async {
     try {
-      var response = await DioClient.getCall('getNoteList.php');
+      var response = await DioClient.getCall('notes/getNoteList.php');
       NoteListResponse noteListResponse = NoteListResponse.fromJson(response);
       return noteListResponse;
     } on DioError catch (e) {
-      GeneralError generalError =  error(e);
-      return NoteListResponse(success: generalError.success, message:  generalError.message);
+      GeneralError generalError = error(e);
+      return NoteListResponse(
+          success: generalError.status, message: generalError.message);
     }
   }
 
@@ -26,20 +27,22 @@ class DioServices {
           NoteListResponse.fromJson(response.data);
       return noteListResponse;
     } on DioError catch (e) {
-      GeneralError generalError =  error(e);
-      return NoteListResponse(success: generalError.success, message:  generalError.message);
+      GeneralError generalError = error(e);
+      return NoteListResponse(
+          success: generalError.status, message: generalError.message);
     }
   }
 
   static Future<NoteResponse> addNoteBody(NotesModel notesModel) async {
     try {
-      var response = await DioClient.postCall('addNoteBody.php',
+      var response = await DioClient.postCall('notes/addNoteBody.php',
           bodyData: notesModel.toJson());
       NoteResponse noteResponse = NoteResponse.fromJson(response);
       return noteResponse;
     } on DioError catch (e) {
-      GeneralError generalError =  error(e);
-      return NoteResponse(success: generalError.success, message:  generalError.message);
+      GeneralError generalError = error(e);
+      return NoteResponse(
+          success: generalError.status, message: generalError.message);
     }
   }
 
@@ -51,13 +54,14 @@ class DioServices {
         "datetime": date,
         "priority": priority,
       });
-      var response =
-          await DioClient.postCall('addNoteFormData.php', formData: formData);
+      var response = await DioClient.postCall('notes/addNoteFormData.php',
+          formData: formData);
       NoteResponse noteResponse = NoteResponse.fromJson(response);
       return noteResponse;
     } on DioError catch (e) {
-      GeneralError generalError =  error(e);
-      return NoteResponse(success: generalError.success, message:  generalError.message);
+      GeneralError generalError = error(e);
+      return NoteResponse(
+          success: generalError.status, message: generalError.message);
     }
   }
 
@@ -74,8 +78,24 @@ class DioServices {
       ImageResponse imageResponse = ImageResponse.fromJson(response);
       return imageResponse;
     } on DioError catch (e) {
-      GeneralError generalError =  error(e);
-      return ImageResponse(success: generalError.success, message:  generalError.message);
+      GeneralError generalError = error(e);
+      return ImageResponse(
+          success: generalError.status, message: generalError.message);
+    }
+  }
+
+  static Future<NoteResponse> refreshToken(String data) async {
+    try {
+      FormData formData = new FormData.fromMap({
+        "data": data,
+      });
+      var response = await DioClient.postCall('others/requestSomething.php',
+          formData: formData);
+      NoteResponse noteResponse = NoteResponse.fromJson(response);
+      return noteResponse;
+    } on DioError catch (e) {
+      GeneralError generalError = error(e);
+      return NoteResponse(success: generalError.status, message: generalError.message);
     }
   }
 }

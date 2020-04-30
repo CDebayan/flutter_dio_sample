@@ -2,31 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutterdiosample/data/dio_interceptor.dart';
 
 class DioClient {
   static final Dio _dio = Dio();
-  static final String _baseUrl = "http://192.168.0.7/generalapis/scripts/notes/";
+  static final String baseUrl = "http://192.168.0.7/generalapis/scripts/";
+  static String token = "your token";
 
   static Dio _invoke() {
-    _dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-      options.headers["token"] = "your token";
-      options.baseUrl = _baseUrl;
-
-//      // print requests
-//      print("Pre request:${options.method},${options.baseUrl}${options.path.toString()}");
-//      print("Pre request:${options.headers.toString()}");
-//
-//      return options;
-//    }, onResponse: (Response response) async {
-//      print("Response From:${response.request.method},${response.request.baseUrl}${response.request.path}");
-//      print("Response From:${response.toString()}");
-    }));
-    _dio.interceptors.add(LogInterceptor(requestBody: true,responseBody: true));
+    _dio.interceptors.add(DioInterceptor());
     return _dio;
   }
-
-
 
   static getCall(String path, {Map<String, String> queryParameters}) async{
     Response response = await _invoke().get(path,queryParameters: queryParameters);
@@ -68,17 +54,17 @@ class DioClient {
 GeneralError error(DioError e){
   if (e.error is SocketException) {
   } else if (e.error is HttpException) {
-    return GeneralError(success: -1, message: "HttpException");
+    return GeneralError(status: -1, message: "HttpException");
   } else if (e.error is FormatException) {
-    return GeneralError(success: -1, message: "FormatException");
+    return GeneralError(status: -1, message: "FormatException");
   }else if(e.type is DioErrorType){
-    return GeneralError(success: -1, message: "HttpException");
+    return GeneralError(status: e.response.statusCode, message: e.message);
   }
   return null;
 }
 
 class GeneralError{
-  int success;
+  int status;
   String message;
-  GeneralError({this.success,this.message});
+  GeneralError({this.status,this.message});
 }
