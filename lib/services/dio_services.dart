@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutterdiosample/model/get_call_list_model.dart';
 import 'package:flutterdiosample/model/get_call_model.dart';
+import 'package:flutterdiosample/model/get_call_path_model.dart';
 
 import 'dio_client.dart';
 
@@ -24,6 +25,17 @@ class DioServices {
     } on DioError catch (e) {
       GeneralError generalError = error(e);
       return GetCallListModel(status: generalError.status, message: generalError.message);
+    }
+  }
+
+  static Future<GetCallPathModel> getCallPath(int id,String name,int age) async {
+    try {
+      var response = await DioClient.getCall('getCallPathParam/$id/$name/$age');
+      GetCallPathModel getCallPathModel = GetCallPathModel.fromJson(response);
+      return getCallPathModel;
+    } on DioError catch (e) {
+      GeneralError generalError = error(e);
+      return GetCallPathModel(status: generalError.status, message: generalError.message);
     }
   }
 

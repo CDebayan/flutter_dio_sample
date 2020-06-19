@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterdiosample/screen/get_call_list_screen.dart';
+import 'package:flutterdiosample/screen/get_call_path_screen.dart';
 import 'package:flutterdiosample/screen/get_call_screen.dart';
 
 class HomePageScreen extends StatelessWidget {
@@ -20,6 +21,12 @@ class HomePageScreen extends StatelessWidget {
               child: Text("GET CALL LIST"),
               onPressed: () {
                 nextActivity(context, GetCallListScreen());
+              },
+            ),
+            RaisedButton(
+              child: Text("GET CALL PATH"),
+              onPressed: () {
+                nextActivity(context, GetCallPathScreen());
               },
             ),
           ],
