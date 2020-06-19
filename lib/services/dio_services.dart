@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutterdiosample/model/get_call_list_model.dart';
 import 'package:flutterdiosample/model/get_call_model.dart';
 import 'package:flutterdiosample/model/get_call_path_model.dart';
+import 'package:flutterdiosample/model/get_call_query_model.dart';
 
 import 'dio_client.dart';
 
@@ -13,7 +14,8 @@ class DioServices {
       return getCallModel;
     } on DioError catch (e) {
       GeneralError generalError = error(e);
-      return GetCallModel(status: generalError.status, message: generalError.message);
+      return GetCallModel(
+          status: generalError.status, message: generalError.message);
     }
   }
 
@@ -24,37 +26,41 @@ class DioServices {
       return getCallListModel;
     } on DioError catch (e) {
       GeneralError generalError = error(e);
-      return GetCallListModel(status: generalError.status, message: generalError.message);
+      return GetCallListModel(
+          status: generalError.status, message: generalError.message);
     }
   }
 
-  static Future<GetCallPathModel> getCallPath(int id,String name,int age) async {
+  static Future<GetCallPathModel> getCallPath(
+      int id, String name, int age) async {
     try {
       var response = await DioClient.getCall('getCallPathParam/$id/$name/$age');
       GetCallPathModel getCallPathModel = GetCallPathModel.fromJson(response);
       return getCallPathModel;
     } on DioError catch (e) {
       GeneralError generalError = error(e);
-      return GetCallPathModel(status: generalError.status, message: generalError.message);
+      return GetCallPathModel(
+          status: generalError.status, message: generalError.message);
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  static Future<GetCallQueryModel> getCallQuery(
+      String id, String name, String age) async {
+    try {
+      var response = await DioClient.getCall('getCallQueryParam',
+          queryParameters: {
+            "id": id,
+            "name": name,
+            "age": age
+          });
+      GetCallQueryModel getCallQueryModel = GetCallQueryModel.fromJson(response);
+      return getCallQueryModel;
+    } on DioError catch (e) {
+      GeneralError generalError = error(e);
+      return GetCallQueryModel(
+          status: generalError.status, message: generalError.message);
+    }
+  }
 
 //  static Future<NoteListResponse> getNoteById(String id) async {
 //    try {
