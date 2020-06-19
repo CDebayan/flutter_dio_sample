@@ -2,16 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutterdiosample/data/dio_interceptor.dart';
+import 'package:flutterdiosample/services/dio_interceptor.dart';
 
 class DioClient {
-  static final Dio _dio = Dio();
-  static final String baseUrl = "http://192.168.0.7/generalapis/scripts/";
+  static final Dio dio = Dio();
+  static final String baseUrl = "http://192.168.0.5:3001/apisamples/";
   static String token = "your token";
 
   static Dio _invoke() {
-    _dio.interceptors.add(DioInterceptor());
-    return _dio;
+    dio.interceptors.add(DioInterceptor());
+    return dio;
   }
 
   static getCall(String path, {Map<String, String> queryParameters}) async{

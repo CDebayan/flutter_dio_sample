@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutterdiosample/data/dio_client.dart';
+import 'package:flutterdiosample/services/dio_client.dart';
 
 class DioInterceptor extends InterceptorsWrapper{
   @override
@@ -21,9 +21,6 @@ class DioInterceptor extends InterceptorsWrapper{
 
   @override
   Future onError(DioError err) async{
-    if(err.response.statusCode == 403){
-      DioClient.token = "my token";
-    }
     return err;
   }
 }

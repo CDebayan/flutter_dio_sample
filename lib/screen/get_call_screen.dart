@@ -1,79 +1,64 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterdiosample/data/dio_services.dart';
-import 'package:flutterdiosample/model/note_list_model.dart';
+import 'package:flutterdiosample/functionality.dart';
+import 'package:flutterdiosample/model/get_call_model.dart';
+import 'package:flutterdiosample/services/dio_services.dart';
+import 'package:flutterdiosample/widget/widgets.dart';
 
+class GetCallScreen extends StatefulWidget {
+  @override
+  _GetCallScreenState createState() => _GetCallScreenState();
+}
 
-class GetCallScreen extends StatelessWidget {
+class _GetCallScreenState extends State<GetCallScreen> with Functionality {
+  String responseDate = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: FutureBuilder<NoteListResponse>(
-        future: DioServices.getNoteList(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return _buildNoteList(snapshot.data);
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      )),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(responseDate),
+            RaisedButton(
+              child: Text("CLICK"),
+              onPressed: () async {
+                GetCallModel response = await DioServices.getCall();
+                _setValue(response);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
-}
 
-Widget _buildNoteList(NoteListResponse data) {
-  if (data != null) {
-    if (data.success == 1) {
-      if (data.noteList != null) {
-        var notesList = data.noteList;
-        return ListView.builder(
-          itemCount: notesList.length,
-          itemBuilder: (context, index) {
-            return _buildNoteItem(notesList[index]);
-          },
-        );
+  void _setValue(GetCallModel response) {
+    if (isValidObject(response) &&
+        isValidObject(response.status) &&
+        response.status == 1) {
+      if (isValidObject(response.student)) {
+        String id = "";
+        String name = "";
+        String age = "";
+        if (isValidObject(response.student.id)) {
+          id = response.student.id.toString();
+        }
+        if (isValidString(response.student.name)) {
+          name = response.student.name.toString();
+        }
+        if (isValidObject(response.student.age)) {
+          age = response.student.age.toString();
+        }
+
+        setState(() {
+          responseDate = "Id : $id, Name : $name, age : $age";
+        });
       }
-    } else if (data.success == 0) {
-      return Center(
-        child: Text("Your Own Message"),
-      );
-    } else if (data.success == -1) {
-      return Center(
-        child: Text(data.message),
-      );
+    } else {
+      if (isValidString(response.message)) {
+        showToast(message: response.message);
+      }
     }
   }
-
-  return Center(
-    child: Text("Something Went Wrong"),
-  );
-}
-
-Widget _buildNoteItem(NotesModel noteItem) {
-  return Card(
-    margin: EdgeInsets.only(top: 16, left: 16, right: 16),
-    child: Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(noteItem.note),
-          SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(noteItem.datetime),
-              Text(noteItem.priority),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
 }
