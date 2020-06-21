@@ -5,7 +5,8 @@ import 'package:flutterdiosample/model/get_call_path_model.dart';
 import 'package:flutterdiosample/model/get_call_query_model.dart';
 import 'package:flutterdiosample/model/post_call_body_model.dart';
 import 'package:flutterdiosample/model/post_call_form_data_model.dart';
-
+import 'package:flutterdiosample/model/single_image_upload_model.dart';
+import 'package:path/path.dart';
 import 'dio_client.dart';
 
 class DioServices {
@@ -92,6 +93,21 @@ class DioServices {
     } on DioError catch (e) {
       GeneralError generalError = error(e);
       return PostCallFormDataModel(
+          status: generalError.status, message: generalError.message);
+    }
+  }
+
+  static Future<SingleImageUploadModel> uploadImage(String imagePath) async {
+    try {
+      FormData formData = FormData.fromMap({
+        "image": await MultipartFile.fromFile(imagePath, filename: basename(imagePath)),
+      });
+      var response = await DioClient.postCall('singleImageUpload', formData: formData);
+      SingleImageUploadModel imageResponse = SingleImageUploadModel.fromJson(response);
+      return imageResponse;
+    } on DioError catch (e) {
+      GeneralError generalError = error(e);
+      return SingleImageUploadModel(
           status: generalError.status, message: generalError.message);
     }
   }
