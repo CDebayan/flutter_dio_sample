@@ -14,13 +14,14 @@ class DioClient {
     return dio;
   }
 
-  static getCall(String path, {Map<String, String> queryParameters}) async{
-    Response response = await _invoke().get(path,queryParameters: queryParameters);
-    if(response != null){
-      if(response.data != null){
-        if(response.data is String){
+  static getCall(String path, {Map<String, String> queryParameters}) async {
+    Response response =
+        await _invoke().get(path, queryParameters: queryParameters);
+    if (response != null) {
+      if (response.data != null) {
+        if (response.data is String) {
           return json.decode(response.data);
-        }else if(response.data is Map){
+        } else if (response.data is Map) {
           return response.data;
         }
       }
@@ -28,21 +29,22 @@ class DioClient {
     return null;
   }
 
-  static postCall(String path, {Map<String, dynamic> bodyData,FormData formData}) async{
+  static postCall(String path,
+      {Map<String, dynamic> bodyData, FormData formData}) async {
     Response response;
-    if(bodyData != null && formData == null){
-      response = await _invoke().post(path,data: bodyData);
-    }else if(bodyData == null && formData != null){
-      response = await _invoke().post(path,data: formData);
-    }else if(bodyData == null && formData == null){
+    if (bodyData != null && formData == null) {
+      response = await _invoke().post(path, data: bodyData);
+    } else if (bodyData == null && formData != null) {
+      response = await _invoke().post(path, data: formData);
+    } else if (bodyData == null && formData == null) {
       response = await _invoke().post(path);
     }
 
-    if(response != null){
-      if(response.data != null){
-        if(response.data is String){
+    if (response != null) {
+      if (response.data != null) {
+        if (response.data is String) {
           return json.decode(response.data);
-        }else if(response.data is Map){
+        } else if (response.data is Map) {
           return response.data;
         }
       }
@@ -51,20 +53,23 @@ class DioClient {
   }
 }
 
-GeneralError error(DioError e){
+GeneralError error(DioError e) {
   if (e.error is SocketException) {
-  } else if (e.error is HttpException) {
-    return GeneralError(status: -1, message: "HttpException");
-  } else if (e.error is FormatException) {
-    return GeneralError(status: -1, message: "FormatException");
-  }else if(e.type is DioErrorType){
-    return GeneralError(status: e.response.statusCode, message: e.message);
+    return GeneralError(status: -1, message: "You are not connected to internet!");
+  }else if (e.type is DioErrorType) {
+    if (e.response.statusCode != null && e.message != null) {
+      return GeneralError(status: e.response.statusCode, message: e.message, data: e.response.data);
+    }else{
+      return GeneralError(status: -2, message: "Something went wrong");
+    }
   }
   return null;
 }
 
-class GeneralError{
+class GeneralError {
   int status;
   String message;
-  GeneralError({this.status,this.message});
+  dynamic data;
+
+  GeneralError({this.status, this.message, this.data});
 }

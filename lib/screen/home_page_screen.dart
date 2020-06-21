@@ -3,6 +3,7 @@ import 'package:flutterdiosample/screen/get_call_list_screen.dart';
 import 'package:flutterdiosample/screen/get_call_path_screen.dart';
 import 'package:flutterdiosample/screen/get_call_query_screen.dart';
 import 'package:flutterdiosample/screen/get_call_screen.dart';
+import 'package:flutterdiosample/screen/post_call_body_screen.dart';
 
 class HomePageScreen extends StatelessWidget {
   @override
@@ -36,6 +37,12 @@ class HomePageScreen extends StatelessWidget {
                 nextActivity(context, GetCallQueryScreen());
               },
             ),
+            RaisedButton(
+              child: Text("POST CALL BODY"),
+              onPressed: () {
+                nextActivity(context, PostCallBodyScreen());
+              },
+            )
           ],
         ),
       ),
