@@ -6,6 +6,7 @@ import 'package:flutterdiosample/screen/get_call_screen.dart';
 import 'package:flutterdiosample/screen/post_call_body_screen.dart';
 import 'package:flutterdiosample/screen/post_call_form_data_screen.dart';
 import 'package:flutterdiosample/screen/single_image_upload_screen.dart';
+import 'package:flutterdiosample/screen/single_image_upload_with_data_screen.dart';
 
 class HomePageScreen extends StatelessWidget {
   @override
@@ -55,6 +56,12 @@ class HomePageScreen extends StatelessWidget {
               child: Text("UPLOAD SINGLE IMAGE"),
               onPressed: () {
                 nextActivity(context, SingleImageUploadScreen());
+              },
+            ),
+            RaisedButton(
+              child: Text("UPLOAD SINGLE IMAGE WITH DATA"),
+              onPressed: () {
+                nextActivity(context, SingleImageUploadWithDataScreen());
               },
             ),
           ],

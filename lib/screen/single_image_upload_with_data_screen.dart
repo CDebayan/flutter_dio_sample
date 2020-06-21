@@ -1,24 +1,25 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutterdiosample/functionality.dart';
-import 'package:flutterdiosample/model/single_image_upload_model.dart';
+import 'package:flutterdiosample/model/single_image_upload_with_data.dart';
 import 'package:flutterdiosample/services/dio_services.dart';
 import 'package:flutterdiosample/widget/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
-class SingleImageUploadScreen extends StatefulWidget {
+class SingleImageUploadWithDataScreen extends StatefulWidget {
   @override
-  _SingleImageUploadScreenState createState() =>
-      _SingleImageUploadScreenState();
+  _SingleImageUploadWithDataScreenState createState() =>
+      _SingleImageUploadWithDataScreenState();
 }
 
-class _SingleImageUploadScreenState extends State<SingleImageUploadScreen>
-    with Functionality {
+class _SingleImageUploadWithDataScreenState
+    extends State<SingleImageUploadWithDataScreen> with Functionality {
   final ImagePicker _picker = ImagePicker();
   PickedFile pickedFile;
-
   String imageUrl = "";
+  String responseData = "";
 
   @override
   Widget build(BuildContext context) {
@@ -43,26 +44,41 @@ class _SingleImageUploadScreenState extends State<SingleImageUploadScreen>
                   child: Text("Upload Image"),
                   onPressed: () async {
                     if (isValidObject(pickedFile)) {
-                      SingleImageUploadModel response =
-                          await DioServices.uploadImage(pickedFile.path);
+                      SingleImageUploadWithDataModel response =
+                          await DioServices.uploadImageWithData(
+                              pickedFile.path, "DC", "23");
                       _setValue(response);
                     }
                   })
             ],
           ),
           Expanded(child: Image.network(imageUrl)),
+          Text(responseData),
         ],
       ),
     );
   }
 
-  void _setValue(SingleImageUploadModel response) {
+  void _setValue(SingleImageUploadWithDataModel response) {
     if (isValidObject(response) &&
         isValidObject(response.status) &&
         response.status == 1) {
-      if (isValidString(response.imageUrl)) {
+      if (isValidObject(response.student)) {
+        String name = "";
+        String age = "";
+        if (isValidString(response.student.name)) {
+          name = response.student.name.toString();
+        }
+        if (isValidObject(response.student.age)) {
+          age = response.student.age.toString();
+        }
+        if (isValidString(response.student.imageUrl)) {
+          imageUrl = response.student.imageUrl;
+        }
+
         setState(() {
-          this.imageUrl = response.imageUrl;
+          this.imageUrl = response.student.imageUrl;
+          responseData = "Name : $name, age : $age";
         });
       }
     } else {

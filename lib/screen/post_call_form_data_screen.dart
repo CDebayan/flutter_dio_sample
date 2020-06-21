@@ -11,7 +11,7 @@ class PostCallFormDataScreen extends StatefulWidget {
 
 class _PostCallFormDataScreenState extends State<PostCallFormDataScreen>
     with Functionality {
-  String responseDate = "";
+  String responseData = "";
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class _PostCallFormDataScreenState extends State<PostCallFormDataScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(responseDate),
+            Text(responseData),
             RaisedButton(
               child: Text("CLICK"),
               onPressed: () async {
@@ -53,7 +53,7 @@ class _PostCallFormDataScreenState extends State<PostCallFormDataScreen>
         }
 
         setState(() {
-          responseDate = "Id : $id, Name : $name, age : $age";
+          responseData = "Id : $id, Name : $name, age : $age";
         });
       }
     } else {

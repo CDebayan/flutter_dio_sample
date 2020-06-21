@@ -10,7 +10,7 @@ class GetCallQueryScreen extends StatefulWidget {
 }
 
 class _GetCallQueryScreenState extends State<GetCallQueryScreen> with Functionality{
-  String responseDate = "";
+  String responseData = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +18,7 @@ class _GetCallQueryScreenState extends State<GetCallQueryScreen> with Functional
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(responseDate),
+            Text(responseData),
             RaisedButton(
               child: Text("CLICK"),
               onPressed: () async {
@@ -50,7 +50,7 @@ class _GetCallQueryScreenState extends State<GetCallQueryScreen> with Functional
         }
 
         setState(() {
-          responseDate = "Id : $id, Name : $name, age : $age";
+          responseData = "Id : $id, Name : $name, age : $age";
         });
       }
     } else {

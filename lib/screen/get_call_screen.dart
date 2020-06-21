@@ -10,7 +10,7 @@ class GetCallScreen extends StatefulWidget {
 }
 
 class _GetCallScreenState extends State<GetCallScreen> with Functionality {
-  String responseDate = "";
+  String responseData = "";
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class _GetCallScreenState extends State<GetCallScreen> with Functionality {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(responseDate),
+            Text(responseData),
             RaisedButton(
               child: Text("CLICK"),
               onPressed: () async {
@@ -52,7 +52,7 @@ class _GetCallScreenState extends State<GetCallScreen> with Functionality {
         }
 
         setState(() {
-          responseDate = "Id : $id, Name : $name, age : $age";
+          responseData = "Id : $id, Name : $name, age : $age";
         });
       }
     } else {

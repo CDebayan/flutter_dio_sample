@@ -6,6 +6,7 @@ import 'package:flutterdiosample/model/get_call_query_model.dart';
 import 'package:flutterdiosample/model/post_call_body_model.dart';
 import 'package:flutterdiosample/model/post_call_form_data_model.dart';
 import 'package:flutterdiosample/model/single_image_upload_model.dart';
+import 'package:flutterdiosample/model/single_image_upload_with_data.dart';
 import 'package:path/path.dart';
 import 'dio_client.dart';
 
@@ -103,12 +104,28 @@ class DioServices {
         "image": await MultipartFile.fromFile(imagePath, filename: basename(imagePath)),
       });
       var response = await DioClient.postCall('singleImageUpload', formData: formData);
-      SingleImageUploadModel imageResponse = SingleImageUploadModel.fromJson(response);
-      return imageResponse;
+      SingleImageUploadModel singleImageUploadModel = SingleImageUploadModel.fromJson(response);
+      return singleImageUploadModel;
     } on DioError catch (e) {
       GeneralError generalError = error(e);
       return SingleImageUploadModel(
           status: generalError.status, message: generalError.message);
+    }
+  }
+
+  static Future<SingleImageUploadWithDataModel> uploadImageWithData(String imagePath,String name,String age) async {
+    try {
+      FormData formData = FormData.fromMap({
+        "image": await MultipartFile.fromFile(imagePath, filename: basename(imagePath)),
+        "name" : name,
+        "age" : age
+      });
+      var response = await DioClient.postCall('singleImageUploadWithData', formData: formData);
+      SingleImageUploadWithDataModel singleImageUploadWithDataModel = SingleImageUploadWithDataModel.fromJson(response);
+      return singleImageUploadWithDataModel;
+    } on DioError catch (e) {
+      GeneralError generalError = error(e);
+      return SingleImageUploadWithDataModel(status: generalError.status, message: generalError.message);
     }
   }
 
