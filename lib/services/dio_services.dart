@@ -4,6 +4,7 @@ import 'package:flutterdiosample/model/get_call_model.dart';
 import 'package:flutterdiosample/model/get_call_path_model.dart';
 import 'package:flutterdiosample/model/get_call_query_model.dart';
 import 'package:flutterdiosample/model/post_call_body_model.dart';
+import 'package:flutterdiosample/model/post_call_form_data_model.dart';
 
 import 'dio_client.dart';
 
@@ -72,6 +73,25 @@ class DioServices {
     } on DioError catch (e) {
       GeneralError generalError = error(e);
       return PostCallBodyModel(
+          status: generalError.status, message: generalError.message);
+    }
+  }
+
+  static Future<PostCallFormDataModel> postCallFormData(String id, String name, String age) async {
+    try {
+      FormData formData = new FormData.fromMap({
+        "id": id,
+        "name": name,
+        "age": age,
+      });
+
+      var response = await DioClient.postCall('postCallFormData',
+          formData: formData);
+      PostCallFormDataModel postCallFormDataModel = PostCallFormDataModel.fromJson(response);
+      return postCallFormDataModel;
+    } on DioError catch (e) {
+      GeneralError generalError = error(e);
+      return PostCallFormDataModel(
           status: generalError.status, message: generalError.message);
     }
   }

@@ -7,6 +7,7 @@ class PostCallBodyModel {
 
   PostCallBodyModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
+    message = json['message'];
     student = json['student'] != null
         ? new PostCallStudent.fromJson(json['student'])
         : null;
